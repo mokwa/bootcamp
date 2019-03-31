@@ -3,13 +3,12 @@ var app = express();
 var bodyParser = require("body-parser");
 
 var campgrounds = [
-    {name: "Salmon Creek", image: "https://www.photosforclass.com/download/pixabay-1031139?webUrl=https%3A%2F%2Fpixabay.com%2Fget%2Fe835b20e29f7083ed1584d05fb1d4e97e07ee3d21cac104490f3c77fa3efb3b1_960.jpg&user=Free-Photos"},
-    {name: "Granite Hill", image: "https://www.photosforclass.com/download/flickr-7121865553"},
-    {name: "Montain Goat's Rest", image: "https://www.photosforclass.com/download/flickr-2164766085"},
-    {name: "Salmon Creek", image: "https://www.photosforclass.com/download/pixabay-1031139?webUrl=https%3A%2F%2Fpixabay.com%2Fget%2Fe835b20e29f7083ed1584d05fb1d4e97e07ee3d21cac104490f3c77fa3efb3b1_960.jpg&user=Free-Photos"},
-    {name: "Granite Hill", image: "https://www.photosforclass.com/download/flickr-7121865553"},
-    {name: "Montain Goat's Rest", image: "https://www.photosforclass.com/download/flickr-2164766085"}
-
+    {name: "Salmon Creek", image: "https://pixabay.com/get/e83db80d2cfd053ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
+    {name: "Granite Hill", image: "https://pixabay.com/get/ea31b10929f7063ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
+    {name: "Mountain Goat's Rest", image: "https://pixabay.com/get/eb3db30a29fd063ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
+    {name: "Kirk Creek", image: "https://pixabay.com/get/ea3cb40f2afd073ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
+    {name: "Morro Bay", image: "https://pixabay.com/get/e83db3062df51c22d2524518b7444795ea76e5d004b0144491f0c370a3e5bd_340.jpg"},
+    {name: "Namakanipaio", image: "https://farm4.staticflickr.com/3319/3493312828_365d80acb7.jpg"}
 ]
 
 app.use(bodyParser.urlencoded({extended: true}));
