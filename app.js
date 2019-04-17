@@ -1,16 +1,12 @@
-var express = require("express");
-var app = express();
-var bodyParser = require("body-parser");
-
-var campgrounds = [
-    {name: "Salmon Creek", image: "https://pixabay.com/get/e83db80d2cfd053ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
-    {name: "Granite Hill", image: "https://pixabay.com/get/ea31b10929f7063ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
-    {name: "Mountain Goat's Rest", image: "https://pixabay.com/get/eb3db30a29fd063ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
-    {name: "Kirk Creek", image: "https://pixabay.com/get/ea3cb40f2afd073ed1584d05fb1d4e97e07ee3d21cac104490f4c17baee9bdb0_340.jpg"},
-    {name: "Morro Bay", image: "https://pixabay.com/get/e83db3062df51c22d2524518b7444795ea76e5d004b0144491f0c370a3e5bd_340.jpg"},
-    {name: "Namakanipaio", image: "https://farm4.staticflickr.com/3319/3493312828_365d80acb7.jpg"}
-]
-
+var express    = require("express"),
+    app        = express(),
+    bodyParser = require("body-parser"),
+    mongoose   = require("mongoose")
+    Campground = require("./models/campgrounds"),
+    seedDB     = require("./seeds")
+     
+seedDB();
+mongoose.connect("mongodb://localhost:27017/yelp_camp", {useNewUrlParser: true});
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
@@ -18,22 +14,55 @@ app.get("/", function(req, res){
     res.render("landing");
 });
 
+//INDEX - show all campgrounds
 app.get("/campgrounds", function(req, res){
-    res.render("campgrounds", {campgrounds: campgrounds});
+    //Get all campgrounds from DB
+    Campground.find({}, function(err, allcampgrounds){
+        if(err){
+            console.log(err);
+        } else {
+            res.render("index", {campgrounds:allcampgrounds});
+        }
+    });
+    
 });
 
+//CREATE - add new campground to database
 app.post("/campgrounds", function(req, res){
     //get data from form and add to campgrounds array
     var name = req.body.name;
     var image = req.body.image;
-    var newCampground = {name: name, image: image};
-    campgrounds.push(newCampground);
-    //redirect back to campground page
-    res.redirect("/campgrounds");
+    var description = req.body.description;
+    var newCampground = {name: name, image: image, description: description};
+    //Create a new campground and save to DB
+    Campground.create(newCampground, function(err, newlyCreated){
+        if(err){
+            console.log(err);
+        } else {
+            //redirect back to campground page
+            res.redirect("/campgrounds");
+        }
+    })
+    
 });
 
+//NEW - show from to create a new campground
 app.get("/campgrounds/new", function(req, res){
     res.render("new.ejs")
+})
+
+//SHOW - show more info about one campground
+app.get("/campgrounds/:id", function(req,res){
+    //find the campground with provided ID
+    Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
+        if(err){
+            console.log(err);
+        } else {
+            console.log(foundCampground);
+            //render show template with that campground
+           res.render("show", {campground: foundCampground})  
+        }
+    });
 })
 
 app.listen(8000, process.env.IP, function(){
